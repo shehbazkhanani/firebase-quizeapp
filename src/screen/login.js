@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logInUser } from "../config/firebasemethod";
@@ -14,9 +14,11 @@ function Login (){
   const [password, setPassword] = useState("")
   const [isLoading, setLoading] = useState(false)
 
+  
   const loginUser = () => {
       setLoading(true)
-    logInUser({email, password}).then((succ)=> {
+      logInUser({email, password}).then((succ)=> {
+        localStorage.setItem('myData', JSON.stringify(succ))
         if(succ.cAdmin == true) {navigate("dashboard", {
             state : {succ},
         })} else {

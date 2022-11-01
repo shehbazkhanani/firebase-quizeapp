@@ -1,8 +1,9 @@
 import {BrowserRouter, Route, Router, Routes } from "react-router-dom";
-import Dashboard from "../screen/dashboard";
+import DashBoard from "../screen/AdminScreen/dashboard";
 import Login from "../screen/login";
 import Signup from "../screen/signup";
-import User from "../screen/user";
+import User from "../screen/UserScreen/user";
+
 
 
 function Approute() {
@@ -13,8 +14,8 @@ function Approute() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="signup" element={<Signup />} />
-                <Route path="dashboard/*" element={<Dashboard />} />
-                <Route path="user" element={<User />} />
+                <Route path="dashboard/*" element={<DashBoard />} />
+                <Route path="user/*" element={<User />} />
                 
             </Routes>
         </BrowserRouter>

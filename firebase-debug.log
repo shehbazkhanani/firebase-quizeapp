@@ -1,0 +1,25 @@
+[debug] [2022-11-01T13:13:42.055Z] ----------------------------------------------------------------------
+[debug] [2022-11-01T13:13:42.059Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2022-11-01T13:13:42.060Z] CLI Version:   11.15.0
+[debug] [2022-11-01T13:13:42.061Z] Platform:      darwin
+[debug] [2022-11-01T13:13:42.061Z] Node Version:  v18.12.0
+[debug] [2022-11-01T13:13:42.062Z] Time:          Tue Nov 01 2022 18:13:42 GMT+0500 (Pakistan Standard Time)
+[debug] [2022-11-01T13:13:42.063Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-11-01T13:13:42.214Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-11-01T13:13:42.215Z] > authorizing via signed-in user (cuteboyusman49@gmail.com)
+[debug] [2022-11-01T13:13:42.215Z] [iam] checking project fbquizapp-352dd for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-11-01T13:13:42.218Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/fbquizapp-352dd:testIamPermissions [none]
+[debug] [2022-11-01T13:13:42.219Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/fbquizapp-352dd:testIamPermissions x-goog-quota-user=projects/fbquizapp-352dd
+[debug] [2022-11-01T13:13:42.219Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/fbquizapp-352dd:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-01T13:13:43.884Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/fbquizapp-352dd:testIamPermissions 200
+[debug] [2022-11-01T13:13:43.885Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/fbquizapp-352dd:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-01T13:13:43.887Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/fbquizapp-352dd [none]
+[debug] [2022-11-01T13:13:44.410Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/fbquizapp-352dd 200
+[debug] [2022-11-01T13:13:44.411Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/fbquizapp-352dd {"projectId":"fbquizapp-352dd","projectNumber":"999058597596","displayName":"fbquizapp","name":"projects/fbquizapp-352dd","resources":{"hostingSite":"fbquizapp-352dd","realtimeDatabaseInstance":"fbquizapp-352dd-default-rtdb"},"state":"ACTIVE","etag":"1_e0ef3946-d08f-4dad-8937-62d01e7bc57f"}
+[info] 
+[info] === Deploying to 'fbquizapp-352dd'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2022-11-01T13:13:44.417Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fbquizapp-352dd/versions [none]
+[debug] [2022-11-01T13:13:44.418Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fbquizapp-352dd/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
