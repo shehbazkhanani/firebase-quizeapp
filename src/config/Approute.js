@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Router, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes } from "react-router-dom";
 import DashBoard from "../screen/AdminScreen/dashboard";
 import Login from "../screen/login";
 import Signup from "../screen/signup";
@@ -12,10 +12,10 @@ function Approute() {
         
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/*" element={<User />} />
+                <Route path="login" element={<Login />} />
                 <Route path="signup" element={<Signup />} />
                 <Route path="dashboard/*" element={<DashBoard />} />
-                <Route path="user/*" element={<User />} />
                 
             </Routes>
         </BrowserRouter>

@@ -28,6 +28,11 @@ import CoPresentIcon from '@mui/icons-material/CoPresent';
 import QuizData from './quizdata';
 import UserInformation from './userinformation';
 import AddQuiz from './addquiz';
+import AddCource from './addcource';
+import CourseData from './coursedata';
+import CreateResult from './createresult';
+import ShowResult from './showResult';
+import AddCountry from './addcountry';
 
 const drawerWidth = 240;
 
@@ -101,7 +106,15 @@ function DashBoard() {
   {
     name: "User Information",
     to: "userinformation",
-  }]
+  },
+  {
+    name: "Course Data",
+    to: "coursedata",
+  },
+  {
+    name: "Result",
+    to: "showresult",
+  } ]
 
 
   const LinksOne = [{
@@ -110,6 +123,15 @@ function DashBoard() {
   },{
     name: "Quiz Data",
     to: "quizdata",
+  },{
+    name: "Add Cource",
+    to: "addcource",
+  },{
+    name: "Create Result",
+    to: "createResult",
+  },{
+    name: "Add Country",
+    to: "addcountry",
   }]
 
   return (
@@ -183,7 +205,7 @@ function DashBoard() {
             ))}
           </List>
         </Drawer>
-        <Main open={open}>
+        <Main open={open} sx={{padding : 0}}>
           <DrawerHeader />
           <Routes>
           <Route path="/" element={<MainData />} />  
@@ -192,7 +214,11 @@ function DashBoard() {
           <Route path="/quizdata" element={<QuizData />} />
           <Route path="/userinformation" element={<UserInformation />} />
           <Route path="/addquiz" element={<AddQuiz />} />
-
+          <Route path="/addcource" element={<AddCource />} />
+          <Route path="/coursedata" element={<CourseData />} />
+          <Route path="/createresult" element={<CreateResult />} />
+          <Route path="/showresult" element={<ShowResult />} />
+          <Route path="/addcountry" element={<AddCountry />} />
         </Routes>
         </Main>
 
