@@ -2,6 +2,7 @@ import {
   Alert,
   AlertTitle,
   Button,
+  Card,
   Chip,
   Grid,
   MenuItem,
@@ -167,11 +168,20 @@ function AddCource() {
   const courseOpen = [{ name: "Open" }, { name: "Closed" }];
   return (
     <>
+     <div style={{backgroundColor : "#ff9671", minHeight : '100vh', height:"fit-Content", padding : 'none', margin : 'none'}}>
       <Grid
         container
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Grid item md="6" sm="12" xs="12">
+        <Card
+            sx={{
+              width: { md: "50vw" },
+              display: "flex",
+              justifyContent: "center",
+              marginTop : 2,
+              marginBottom : 2
+            }}>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Box
               sx={{
@@ -191,17 +201,17 @@ function AddCource() {
                 variant="h3"
                 sx={{ borderBottom: "1px solid grey", marginTop: 3 }}
               >
-                Create Course Form{" "}
+                Create Course Form
               </Typography>
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "space-evenly",
                   width: "100%",
-                  marginTop: 2,
+                  marginTop: 4,
                 }}
               >
-                <Box sx={{ width: "40%" }}>
+                <Box sx={{ width: "40%"}}>
                   <Typography sx={{ color: "red" }}>
                     {errors.courseName}
                   </Typography>
@@ -344,7 +354,7 @@ function AddCource() {
                   />
                 </Box>
                 <Button sx={{ width: "40%" }} onClick={selectAsis}>
-                  Select
+                  add
                 </Button>
               </Box>
               <Box
@@ -352,7 +362,7 @@ function AddCource() {
                   display: "flex",
                   justifyContent: "center",
                   width: "100%",
-                  marginTop: 5,
+                  marginTop: 2,
                 }}
               >
                 {chip}
@@ -362,11 +372,12 @@ function AddCource() {
                   display: "flex",
                   justifyContent: "space-evenly",
                   width: "100%",
-                  marginTop: 5,
-                  marginBottom: 3,
+                  marginBottom: 1,
                 }}
               >
-                <Button onClick={handleOpen}>Submited</Button>
+                <Button  color="warning"
+                  variant="contained"
+                  sx={{ m: 1, width: "40%", height: "4vh", marginBottom: 3, marginTop : 3 }} onClick={handleOpen}>Submited</Button>
                 <Modal
                   open={open}
                   onClose={handleClose}
@@ -400,8 +411,10 @@ function AddCource() {
               </Box>
             </Box>
           </Box>
+          </Card>
         </Grid>
       </Grid>
+      </div>
     </>
   );
 }

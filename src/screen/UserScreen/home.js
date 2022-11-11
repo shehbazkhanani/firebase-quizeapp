@@ -84,8 +84,7 @@ function Home() {
                   variant="contained"
                   color="primary"
                 >
-                  {" "}
-                  Getting Started{" "}
+                  Getting Started
                 </Button>{" "}
               </Link>
             </Box>

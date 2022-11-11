@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
-import { getDatabase, push, ref } from "firebase/database";
+import { getDatabase, onValue, push, ref } from "firebase/database";
 import app from "../../config/firebaseconfig";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Image from "../../images/quiz.avif";
@@ -37,6 +37,8 @@ function AddQuiz() {
   const [isOption, setIsOption] = useState([]);
   const [isButtonOn, isSetButtonOn] = useState(true);
   const [isErrors, setIsErrors] = useState(initialValue);
+  const [category, setCategory] = useState("");
+
 
   const database = getDatabase(app);
 
@@ -44,12 +46,6 @@ function AddQuiz() {
     setCategories(event.target.value);
     setData((parm) => ({ ...parm, category: event.target.value }));
   };
-
-  const category = [
-    { name: "General Knowledge" },
-    { name: "Science" },
-    { name: "History" },
-  ];
 
   const handleChange = () => {
     if (
@@ -159,8 +155,27 @@ function AddQuiz() {
     );
   }
 
+  const getData = () => {
+   const reference = ref(database, `course`)
+   onValue(reference, (e)=> {
+    let val = e.val()
+    let status = e.exists()
+    if(status) {
+      let value = Object.values(val)
+      let coursevalue = value.map((e) => {
+        return e.courseName
+      })
+      let courseVal = new Set(coursevalue)
+      setCategory([...courseVal])
+    }
+   })
+ }
+
+ useEffect(() => {
+  getData()
+ }, [])
   return (
-    <div style={{backgroundColor : "#ff9671", height : '100%', padding : 'none', margin : 'none'}}>
+    <Box sx={{backgroundColor : "#ff9671", minHeight : '90vh', height:"fit-Content", padding : 'none', margin : 'none',  alignItems : 'center'}}>
     
       <Box>
         <Box>
@@ -168,9 +183,9 @@ function AddQuiz() {
             <ArrowBackIcon />
           </Link>
         </Box>
-        <Grid container sx={{ display: "flex", justifyContent: "center" }}>
+        <Grid container sx={{ display: "flex", justifyContent: "center",}}>
           <Grid item md="6" sm="12" xs="12">
-            <Card sx={{ width: { md: "50vw" } }}>
+            <Card sx={{ width: { md: "50vw" }, marginBottom : 3  }}>
               <Box>
                 <Typography
                   variant="h5"
@@ -223,9 +238,9 @@ function AddQuiz() {
                       variant="standard"
                       sx={{ width: "90%" }}
                     >
-                      {category.map((option) => (
-                        <MenuItem key={option.name} value={option.name}>
-                          {option.name}
+                      {category && category.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -358,7 +373,7 @@ function AddQuiz() {
           </Grid>
         </Grid>
       </Box>
-    </div>
+    </Box>
   );
 }
 

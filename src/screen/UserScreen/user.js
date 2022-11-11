@@ -1,45 +1,179 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
-import { Link, Route, Routes } from "react-router-dom";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { Avatar, Box, FormControl, Menu, MenuItem, Select, Toolbar, Typography } from "@mui/material";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import app from "../../config/firebaseconfig";
+import * as React from 'react';
+import { styled, useTheme } from '@mui/material/styles';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import MuiAppBar from '@mui/material/AppBar';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Information from "./information";
-import Quiz from "./quiz";
-import Home from "./home"
-import logoimg from '../../images/student.jpg'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import { deepOrange } from "@mui/material/colors";
+import AccountMenu from "../../component/userProfile";
+
+const drawerWidth = 240;
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  }),
+);
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-end',
+}));
+
+
 
 function User () {
+  const navigate = useNavigate()
+  const auth = getAuth(app)
+
+  const checkUser = () => {
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        const uid = user.uid
+      }else{
+        navigate('/')
+      }
+    })
+  }
+
+  useEffect(() => {
+    checkUser()
+  })
+
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
  return (
     <>
-  <AppBar sx={{backgroundColor : "black", minHeight: "8vh"}}>
-   <Box sx={{display : "flex", justifyContent: "space-between", alignItems : "center", margin : 3}}>
-  <Box>
-  <img src={logoimg} width="80vw" />
-  </Box>
-  <Box sx={{display : {sm: "none", xs : "none", md : "flex"}}}>
-   <Link to="/" style={{textDecoration: "none", color: "white", fontSize : '1.5rem', margin : 10}}> Home </Link>
-   <Link to="quiz" style={{textDecoration: "none", color: "white", fontSize : '1.5rem', margin : 10}}> Quiz </Link>
-   <Link to="information" style={{textDecoration: "none", color: "white", fontSize : '1.5rem', margin : 10}}> Information </Link>
-  </Box>
-       
-  <Box sx={{display : {sm: "none", xs : "none", md : "flex"}}}>
-   <Link to="login" style={{color : "white"}}> <ExitToAppIcon/> </Link>
-  </Box>
-  <Box sx={{display : {sm: "flex", xs : "flex", md : "none"}}}>
-  <Toolbar>
-      <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-        <MenuIcon style={{color : 'white'}} />
-      </IconButton>
-    </Toolbar>
-  </Box>
-  </Box>
-  </AppBar>
-  <Box>
-   <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="information" element={<Information />} />
-      <Route path="quiz" element={<Quiz />} />
-   </Routes>
-  </Box>
+        <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar open={open} sx={{backgroundColor : "#ff9671"}}>
+        <Toolbar sx={{display : 'flex', justifyContent : 'space-between'}}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            USER PANNEL
+          </Typography>
+         <Box>
+          <AccountMenu auth={auth} / >
+         </Box>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
+
+      </Main>
+    </Box>
     </>
  )
 }

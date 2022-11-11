@@ -31,6 +31,7 @@ function Login() {
       .then((succ) => {
         setFormValue(initialValue);
         localStorage.setItem("myData", JSON.stringify(succ));
+        console.log(succ);
         if (succ.cAdmin == true) {
           navigate("/dashboard", {
             state: { succ },

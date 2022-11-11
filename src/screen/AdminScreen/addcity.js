@@ -1,21 +1,30 @@
-import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, Grid, MenuItem, TextField, Typography } from "@mui/material";
 import { getDatabase, onValue, push, ref, remove } from "firebase/database";
 import { useEffect, useState } from "react";
 import app from "../../config/firebaseconfig";
 
 
-function AddCountry() {
+function AddCity() {
+    const intintialData = {
+        city : "",
+        cityCode : "",
+        country : ""
+    }
     const database = getDatabase(app)
-    const [data, setData] = useState([])
+    const [data, setData] = useState(intintialData)
     const [isData, setIsData] = useState([])
-    console.log(isData, 'Result Data');
+    const [isCountryName, setIsCountryName] = useState("")
+    const [isCategory, setIsCategory] = useState("")
+
     const submitEvent = () => {
-    const reference = ref(database, `Country`)
-    push(reference, data) 
+    const reference = ref(database, `City`)
+    push(reference, data)
+    setIsCategory("")
+    setData(intintialData)
     }
 
     const getData = () => {
-      const reference = ref(database, `Country`)
+      const reference = ref(database, `City`)
       onValue(reference, (e) =>{
         const value = e.val();
         const key = Object.keys(value)
@@ -36,13 +45,35 @@ function AddCountry() {
 
     useEffect(() => {
         getData()
-    },[data])
+    }, [data])
 
-    const deleteEvent = (event) => {
-      let uid = event.uid
-      const reference = ref(database, `Country/${uid}`)
-      remove(reference)
-    }
+useEffect(() => {
+    const reference = ref(database, `Country`)
+    onValue(reference, (e) =>{
+      const value = e.val();
+      const status = e.exists()
+      if(status){
+          const val = Object.values(value)
+          const countryName = val.map((e) => {
+           return e.country
+          })
+          const isCountry = new Set(countryName)
+          setIsCountryName([...isCountry])
+      }
+    })
+}, [])
+
+
+const categoryEvent = (event) => {
+    setIsCategory(event.target.value);
+    setData((e) => ({ ...e, country : event.target.value }))
+  };
+
+  const deleteEvent = (event) => {
+    let uid = event.uid
+    const reference = ref(database, `City/${uid}`)
+    remove(reference)
+  }
 
   return (
     <>
@@ -60,30 +91,41 @@ function AddCountry() {
           >
             <Box sx={{ width: "100%" }}>
               <Box sx={{ textAlign: "center", marginTop: 2 }}>
-                <Typography variant="h4"> Add Country </Typography>
+                <Typography variant="h4"> Add City </Typography>
               </Box>
               <Box sx={{ textAlign: "center" }}>
+              <TextField
+              sx={{ margin: 1, width : "40%" }}
+                    select
+                    label="Select your Course"
+                    value={isCategory}
+                    onChange={categoryEvent}
+                    helperText="Please select your course"
+                    variant="standard"
+                  >
+                    {!!isCountryName.length > 0 &&
+                      isCountryName.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                  </TextField>
                 <TextField
-                  sx={{ margin: 1 }}
+                  value={data.city}
+                  sx={{ margin: 1, width : "40%" }}
                   onChange={(e) =>
-                    setData((event) => ({ ...event, country : e.target.value }))
+                    setData((event) => ({ ...event, city : e.target.value }))
                   }
                   variant="standard"
-                  label="Add Country"
+                  label="Add City"
                 />
                 <TextField
-                  sx={{ margin: 1 }}
+                  value={data.cityCode}
+                  sx={{ margin: 1,  width : "40%"  }}
                   variant="standard"
-                  label="Add Country Code"
+                  label="Add City Code"
                   onChange={(e) => 
-                    setData((event) => ({...event, countryCode : e.target.value}))}
-                />
-                <TextField
-                  sx={{ margin: 1 }}
-                  variant="standard"
-                  label="Add Currency"
-                  onChange={(e)=> 
-                    setData((event) => ({...event, currency : e.target.value}))}
+                    setData((event) => ({...event, cityCode : e.target.value}))}
                 />
               </Box>
               <Box sx={{ textAlign: "center" }}>
@@ -115,6 +157,22 @@ function AddCountry() {
                           borderBottom: "1px solid grey",
                         }}
                       >
+                       City Name
+                      </td>
+                      <td
+                        style={{
+                          width: "25vw",
+                          borderBottom: "1px solid grey",
+                        }}
+                      >
+                      City Code
+                      </td>
+                      <td
+                        style={{
+                          width: "25vw",
+                          borderBottom: "1px solid grey",
+                        }}
+                      >
                        Country Name
                       </td>
                       <td
@@ -123,23 +181,7 @@ function AddCountry() {
                           borderBottom: "1px solid grey",
                         }}
                       >
-                       Country Code
-                      </td>
-                      <td
-                        style={{
-                          width: "25vw",
-                          borderBottom: "1px solid grey",
-                        }}
-                      >
-                        Currency
-                      </td>
-                      <td
-                        style={{
-                          width: "25vw",
-                          borderBottom: "1px solid grey",
-                        }}
-                      >
-                        Action
+                      Action
                       </td>
                     </tr>
                   </th>
@@ -148,10 +190,10 @@ function AddCountry() {
                   return (
                     <table style={{ width: "100%", textAlign: "center" }}>
                       <tr>
+    <td style={{ width: "20%" }}> {event.city} </td>
+                        <td style={{ width: "20%" }}> {event.cityCode} </td>
                         <td style={{ width: "20%" }}> {event.country} </td>
-                        <td style={{ width: "20%" }}> {event.countryCode} </td>
-                        <td style={{ width: "20%" }}> {event.currency} </td>
-                        <td style={{ width: "20%" }}> <Button onClick={() => deleteEvent(event)}> Delete </Button> </td>
+                        <td style={{ width: "20%" }}> <Button onClick={() =>deleteEvent(event)}> Delete </Button> </td>
                       </tr>
                     </table>
                   );
@@ -163,4 +205,4 @@ function AddCountry() {
   );
 }
 
-export default AddCountry;
+export default AddCity;

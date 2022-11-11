@@ -16,14 +16,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Link} from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
 import Userdata from './userdata';
 import MainData from './maindata';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import UserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import UserScore from './userscore';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import QuizData from './quizdata';
 import UserInformation from './userinformation';
@@ -33,6 +32,11 @@ import CourseData from './coursedata';
 import CreateResult from './createresult';
 import ShowResult from './showResult';
 import AddCountry from './addcountry';
+import AddCity from './addcity';
+import FormControl from './formcontrol';
+import FormControlData from './formcontroldata';
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import app from '../../config/firebaseconfig';
 
 const drawerWidth = 240;
 
@@ -83,6 +87,32 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 function DashBoard() {
 
+ const navigate = useNavigate()
+
+ const auth = getAuth(app);
+ const SignOut = () => {
+   signOut(auth).then((succ) => {
+   navigate("/")
+   console.log(succ);
+}).catch((error) => {
+  console.log(error);
+});
+ }
+
+const checkUser = () => {
+  onAuthStateChanged(auth, (admin) => {
+    if(admin){
+     const uid = admin.uid;
+    }else {
+     navigate('/')
+    }
+   })
+}
+
+ React.useEffect(()=> {
+  checkUser()
+ }, [])
+  
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -100,10 +130,6 @@ function DashBoard() {
     to: "userdata",
   },
   {
-    name: "User Score",
-    to: "userscore",
-  },
-  {
     name: "User Information",
     to: "userinformation",
   },
@@ -114,6 +140,13 @@ function DashBoard() {
   {
     name: "Result",
     to: "showresult",
+  },
+  {
+    name: "Form Control",
+    to: "formcontrol",
+  },{
+    name: "Form Control Data",
+    to: "formcontroldata",
   } ]
 
 
@@ -132,6 +165,9 @@ function DashBoard() {
   },{
     name: "Add Country",
     to: "addcountry",
+  },{
+    name: "Add City",
+    to: "addcity",
   }]
 
   return (
@@ -153,7 +189,7 @@ function DashBoard() {
             <Typography variant="h6" noWrap component="div">
              ADMIN <AdminPanelSettingsIcon sx={{color : 'white',}} /> PANNEL 
             </Typography>
-            <Link to="/" style={{ textDecoration: "none", color: "white" }}> <Typography sx={{ display: "flex" }} >  <ExitToAppIcon/> </Typography> </Link>
+            <Link onClick={SignOut} style={{ textDecoration: "none", color: "white" }}> <Typography sx={{ display: "flex" }} >  <ExitToAppIcon/> </Typography> </Link>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -210,7 +246,6 @@ function DashBoard() {
           <Routes>
           <Route path="/" element={<MainData />} />  
           <Route path="/userdata" element={<Userdata />} />
-          <Route path="/userscore" element={<UserScore />} />
           <Route path="/quizdata" element={<QuizData />} />
           <Route path="/userinformation" element={<UserInformation />} />
           <Route path="/addquiz" element={<AddQuiz />} />
@@ -219,6 +254,9 @@ function DashBoard() {
           <Route path="/createresult" element={<CreateResult />} />
           <Route path="/showresult" element={<ShowResult />} />
           <Route path="/addcountry" element={<AddCountry />} />
+          <Route path="/addcity" element={<AddCity />} />
+          <Route path="/formcontrol" element={<FormControl />} />
+          <Route path="/formcontroldata" element={<FormControlData />} />
         </Routes>
         </Main>
 

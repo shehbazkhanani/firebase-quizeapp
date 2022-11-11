@@ -10,9 +10,9 @@ import {
 import { Link } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import USswitch from "../../component/switch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import app from "../../config/firebaseconfig";
-import {getDatabase, push, ref } from "firebase/database";
+import {getDatabase, onValue, push, ref } from "firebase/database";
 
 
 function CreateResult() {
@@ -20,6 +20,7 @@ const database = getDatabase(app)
   const [data, setData] = useState({});
   const [categories, setCategories] = useState("");
   const [isCourseStatus, setIsCourseStatus] = useState(false);
+  const [category, setCategory] = useState("")
   const [isResultData, setIsResultData] = useState([
     {
       name: "ABC",
@@ -107,11 +108,26 @@ const database = getDatabase(app)
 //    return error
 // }
 
-  const category = [
-    { name: "General Knowledge" },
-    { name: "Science" },
-    { name: "History" },
-  ];
+const getData = () => {
+  const reference = ref(database, `course`)
+  onValue(reference, (e)=> {
+   let val = e.val()
+   let status = e.exists()
+   if(status) {
+     let value = Object.values(val)
+     let coursevalue = value.map((e) => {
+       return e.courseName
+     })
+     let courseVal = new Set(coursevalue)
+     setCategory([...courseVal])
+   }
+  })
+}
+
+useEffect(() => {
+ getData()
+}, [])
+
   return (
     <>
       <div
@@ -149,9 +165,9 @@ const database = getDatabase(app)
                     helperText="Please select your course"
                     variant="standard"
                   >
-                    {category.map((option) => (
-                      <MenuItem key={option.name} value={option.name}>
-                        {option.name}
+                    {category && category.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
                       </MenuItem>
                     ))}
                   </TextField>
